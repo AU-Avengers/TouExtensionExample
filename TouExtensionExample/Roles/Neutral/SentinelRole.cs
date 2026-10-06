@@ -5,7 +5,9 @@ using MiraAPI.Hud;
 using MiraAPI.LocalSettings;
 using MiraAPI.Patches.Stubs;
 using MiraAPI.Roles;
+using MiraAPI.Translation;
 using MiraAPI.Utilities;
+using MiraAPI.Utilities.Assets;
 using Reactor.Utilities;
 using TouExtensionExample.Assets;
 using TouExtensionExample.Buttons.Neutral;
@@ -28,15 +30,13 @@ public sealed class SentinelRole(IntPtr cppPtr)
 {
     public RoleBehaviour CrewVariant => RoleManager.Instance.GetRole((RoleTypes)RoleId.Get<TrapperRole>());
     public DoomableType DoomHintType => DoomableType.Relentless;
-    public string LocaleKey => "Sentinel";
-    public string RoleName => TouLocale.Get($"ExampleRole{LocaleKey}");
-    public string RoleDescription => TouLocale.GetParsed($"ExampleRole{LocaleKey}IntroBlurb");
-    public string RoleLongDescription => TouLocale.GetParsed($"ExampleRole{LocaleKey}TabDescription");
+    public string IdPrefix => "TouExtensionExample";
+    public string IdPart => "Sentinel";
 
     public string GetAdvancedDescription()
     {
         return
-            TouLocale.GetParsed($"ExampleRole{LocaleKey}WikiDescription") +
+            MiraLocaleManager.Get($"{IdPrefix}.Role.{IdPart}.WikiDescription") +
             MiscUtils.AppendOptionsText(GetType());
     }
 
@@ -47,8 +47,8 @@ public sealed class SentinelRole(IntPtr cppPtr)
         {
             return new List<CustomButtonWikiDescription>
             {
-                new(TouLocale.GetParsed($"ExampleRole{LocaleKey}Explode", "Explode"),
-                    TouLocale.GetParsed($"ExampleRole{LocaleKey}ExplodeWikiDescription"),
+                new(MiraLocaleManager.Get($"{IdPrefix}.Role.{IdPart}.Explode", "Explode"),
+                    MiraLocaleManager.Get($"{IdPrefix}.Role.{IdPart}Explode.WikiDescription"),
                     ExampleNeutAssets.SentinelExplodeSprite),
             };
         }
@@ -62,6 +62,7 @@ public sealed class SentinelRole(IntPtr cppPtr)
     {
         CanUseVent = OptionGroupSingleton<SentinelOptions>.Instance.CanVent,
         IntroSound = TouAudio.GlitchSound,
+        IconTmp = TmpSpriteUtils.CreateSpriteAsset(ExampleRoleIcons.Sentinel.LoadAsset(), "TouExample.Role.Neutral.Sentinel", 1.45f),
         Icon = ExampleRoleIcons.Sentinel,
         GhostRole = (RoleTypes)RoleId.Get<NeutralGhostRole>()
     };
@@ -70,14 +71,14 @@ public sealed class SentinelRole(IntPtr cppPtr)
 
     public bool WinConditionMet()
     {
-        var glitchCount = CustomRoleUtils.GetActiveRolesOfType<SentinelRole>().Count(x => !x.Player.HasDied());
+        var sentiCount = CustomRoleUtils.GetActiveRolesOfType<SentinelRole>().Count(x => !x.Player.HasDied());
 
-        if (MiscUtils.KillersAliveCount > glitchCount)
+        if (MiscUtils.KillersAliveCount > sentiCount || MiscUtils.KillersAliveCount == 0)
         {
             return false;
         }
 
-        return glitchCount >= Helpers.GetAlivePlayers().Count - glitchCount;
+        return sentiCount >= MiscUtils.GetImpactfulLivingPlayers().Count - sentiCount;
     }
 
     public void OffsetButtons()

@@ -1,6 +1,7 @@
 using MiraAPI.GameOptions;
 using MiraAPI.GameOptions.Attributes;
 using MiraAPI.GameOptions.OptionTypes;
+using MiraAPI.Translation;
 using MiraAPI.Utilities;
 using TouExtensionExample.Roles.Neutral;
 using TownOfUs.Modules.Localization;
@@ -9,7 +10,7 @@ namespace TouExtensionExample.Options.Roles.Neutral;
 
 public sealed class SentinelOptions : AbstractOptionGroup<SentinelRole>
 {
-    public override string GroupName => TouLocale.Get("ExampleRoleSentinel", "Sentinel");
+    public override string GroupName => MiraLocaleManager.Get("ExampleRoleSentinel", "Sentinel");
 
     [ModdedNumberOption("ExampleOptionSentinelKillCooldown", 5f, 120f, 2.5f, MiraNumberSuffixes.Seconds)]
     public float KillCooldown { get; set; } = 25f;

@@ -2,6 +2,7 @@ using Il2CppInterop.Runtime.Attributes;
 using MiraAPI.GameOptions;
 using MiraAPI.Hud;
 using MiraAPI.Keybinds;
+using MiraAPI.Translation;
 using MiraAPI.Utilities;
 using MiraAPI.Utilities.Assets;
 using TouExtensionExample.Assets;
@@ -21,7 +22,7 @@ namespace TouExtensionExample.Buttons.Neutral;
 
 public sealed class SentinelExplodeButton : TownOfUsRoleButton<SentinelRole>
 {
-    public override string Name => TouLocale.GetParsed("ExampleRoleSentinelExplode", "Explode");
+    public override string Name => MiraLocaleManager.Get("ExampleRoleSentinelExplode", "Explode");
     public override BaseKeybind Keybind => Keybinds.SecondaryAction;
     public override Color TextOutlineColor => TouExampleColors.Sentinel;
     public override float Cooldown => Math.Clamp(OptionGroupSingleton<SentinelOptions>.Instance.ExplodeCooldown + MapCooldown, 5f, 120f);
