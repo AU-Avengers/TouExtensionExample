@@ -30,7 +30,7 @@ public sealed class SentinelRole(IntPtr cppPtr)
 {
     public RoleBehaviour CrewVariant => RoleManager.Instance.GetRole((RoleTypes)RoleId.Get<TrapperRole>());
     public DoomableType DoomHintType => DoomableType.Relentless;
-    public string IdPrefix => "TouExtensionExample";
+    public string IdPrefix => "TouExtensionExample.Role";
     public string IdPart => "Sentinel";
 
     public string GetAdvancedDescription()
